@@ -20,35 +20,6 @@ import java.util.Scanner;
  */
 public class MyBatisPlusGenerator {
 
-    //创建代码生成器
-    public static AutoGenerator autoGenerator = new AutoGenerator();
-
-    //================ 路径信息 ================
-    //项目所在路径
-    public static String projectPath = System.getProperty("user.dir");
-    //生成代码存放的文件夹
-    public static String projectName = "/code";
-    //父包名
-    public static String parentPath = "com.shanjupay";
-    //模块包名
-    public static String moduleName = "merchant";
-
-    //================ 数据源 ================
-    //数据库驱动
-    public static String driver = "com.mysql.cj.jdbc.Driver";
-    public static String username = "root";
-    public static String password = "root";
-    public static String url =
-            "jdbc:mysql://localhost:3306/temp_generator?serverTimezone=Asia/Shanghai";
-//    public static String url =
-//            "jdbc:mysql://127.0.0.1:3306/shanjupay_transaction?serverTimezone=Asia/Shanghai";
-
-
-    //================ 其他配置================
-    public static String author = "hqz"; //作者
-    public static boolean isDto = false; //设置为false则生成entity, 否则生成dto
-
-
     //================ main方法 ================
     public static void main(String[] args) {
 
@@ -72,11 +43,46 @@ public class MyBatisPlusGenerator {
         autoGenerator.execute();
     }
 
+    //创建代码生成器
+    public static AutoGenerator autoGenerator = new AutoGenerator();
+
+    //================ 路径信息 ================
+    //项目所在路径
+    public static String projectPath = System.getProperty("user.dir");
+    //生成代码存放路径
+    public static String projectName = "/code";
+    //父包名
+    public static String parentPath = "com.shanjupay";
+    //模块包名
+    public static String moduleName = "merchant";
+
+    //================ 数据源 ================
+    //数据库驱动
+    public static String driver = "com.mysql.cj.jdbc.Driver";
+    //用户名
+    public static String username = "root";
+    //密码
+    public static String password = "root";
+    //数据库URL
+    public static String url =
+            "jdbc:mysql://localhost:3306/temp_generator?serverTimezone=Asia/Shanghai";
+//    public static String url =
+//            "jdbc:mysql://127.0.0.1:3306/shanjupay_transaction?serverTimezone=Asia/Shanghai";
+
+
+    //================ 其他配置 ================
+    //作者
+    public static String author = "hqz";
+    //是否生成Dto，如果设置为false会生成entity
+    public static boolean isDto = true;
+
+
     //================ 配置模板引擎 ================
     private static void setTemplateEngine() {
         //设置模板引擎
         autoGenerator.setTemplateEngine(new FreemarkerTemplateEngine());
     }
+
 
     //================ 策略配置 ================
     private static void setStrategy() {
@@ -100,10 +106,11 @@ public class MyBatisPlusGenerator {
 //        strategyConfig.setControllerMappingHyphenStyle(true);
 
         //自动将数据库中表名为 user_info 格式的转为 UserInfo 命名
-        strategyConfig.setTablePrefix(moduleName + "_");//表名映射到实体名称去掉前缀
-        strategyConfig.setEntityBooleanColumnRemoveIsPrefix(true);// Boolean类型字段是否移除is前缀处理
+        strategyConfig.setTablePrefix(moduleName + "_");  //表名映射到实体名称去掉前缀
+        strategyConfig.setEntityBooleanColumnRemoveIsPrefix(true); //Boolean类型字段是否移除is前缀处理
         autoGenerator.setStrategy(strategyConfig);
     }
+
 
     //================ 配置模板 ================
     private static void setTemplate() {
@@ -119,6 +126,7 @@ public class MyBatisPlusGenerator {
         templateConfig.setXml(null);
         autoGenerator.setTemplate(templateConfig);
     }
+
 
     //================ 自定义配置 ================
     private static void setInjectionConfig() {
@@ -147,6 +155,7 @@ public class MyBatisPlusGenerator {
         autoGenerator.setCfg(injectionConfig);
     }
 
+
     //================ 生成包配置 ================
     private static void setPackageInfo() {
         PackageConfig packageConfig = new PackageConfig();
@@ -158,6 +167,7 @@ public class MyBatisPlusGenerator {
         autoGenerator.setPackageInfo(packageConfig);
     }
 
+
     //================ 数据源配置 ================
     private static void setDataSource() {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
@@ -168,19 +178,32 @@ public class MyBatisPlusGenerator {
         autoGenerator.setDataSource(dataSourceConfig);
     }
 
+
     //================ 全局配置 ================
     private static void setGlobalConfig(){
         GlobalConfig globalConfig = new GlobalConfig();
         globalConfig.setOutputDir(projectPath + projectName + "/src/main/java");
         globalConfig.setAuthor(author);
+        //生成后是否打开资源管理器
         globalConfig.setOpen(false);
-        globalConfig.setIdType(IdType.ID_WORKER); //主键策略, 采用雪花片算法生成全局唯一ID
+        //主键策略, 采用雪花片算法生成全局唯一ID
+        globalConfig.setIdType(IdType.ID_WORKER);
+
+        //------------ 设置命名格式 ------------
         if (isDto) {
-            globalConfig.setSwagger2(true); //是否开启Swagger注解
+            //是否开启Swagger注解
+            globalConfig.setSwagger2(true);
             globalConfig.setEntityName("%sDto");
         }
+        //service命名格式
+        globalConfig.setServiceName("%sService");
+        globalConfig.setEntityName("%s");
+        globalConfig.setMapperName("%sMapper");
+
         autoGenerator.setGlobalConfig(globalConfig);
+
     }
+
 
     //================ 读取控制台内容 ================
     private static String scanner(String tip) {
@@ -196,4 +219,5 @@ public class MyBatisPlusGenerator {
         }
         throw new MybatisPlusException("请输入正确的" + tip + "！");
     }
+
 }
