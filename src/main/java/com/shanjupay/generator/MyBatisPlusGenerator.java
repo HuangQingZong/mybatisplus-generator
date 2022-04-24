@@ -24,19 +24,23 @@ public class MyBatisPlusGenerator {
     public static AutoGenerator autoGenerator = new AutoGenerator();
 
     //================ 路径信息 ================
-    public static String projectPath = System.getProperty("user.dir"); //项目路径
-    //=>D:\41学习_编程\21、Java教程\33、项目实战\21、闪聚支付\13、闪聚支付_代码\generator
-    public static String projectName = "/generator-code"; //生成代码存放的文件夹
-    public static String parentPath = "com.shanjupay"; //父包名
-    public static String moduleName = "merchant"; //模块包名
+    //项目所在路径
+    public static String projectPath = System.getProperty("user.dir");
+    //生成代码存放的文件夹
+    public static String projectName = "/code";
+    //父包名
+    public static String parentPath = "com.shanjupay";
+    //模块包名
+    public static String moduleName = "merchant";
 
     //================ 数据源 ================
-    public static String driver = "com.mysql.cj.jdbc.Driver"; //数据库驱动
-    public static String username = "root"; //用户名
-    public static String password = "root"; //密码
-    public static String url = //商户服务
-            "jdbc:mysql://127.0.0.1:3306/work_kdlq?serverTimezone=Asia/Shanghai";
-//    public static String url = //交易服务
+    //数据库驱动
+    public static String driver = "com.mysql.cj.jdbc.Driver";
+    public static String username = "root";
+    public static String password = "root";
+    public static String url =
+            "jdbc:mysql://localhost:3306/temp_generator?serverTimezone=Asia/Shanghai";
+//    public static String url =
 //            "jdbc:mysql://127.0.0.1:3306/shanjupay_transaction?serverTimezone=Asia/Shanghai";
 
 
