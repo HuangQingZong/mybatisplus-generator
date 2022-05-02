@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
@@ -172,14 +173,12 @@ public class MyBatisPlusGenerator {
     private static void assembleGlobalConfig(AutoGenerator autoGenerator){
         GlobalConfig globalConfig = new GlobalConfig();
 
-        globalConfig.setOutputDir(projectPath + projectName + "/src/main/java");
-        globalConfig.setAuthor(author);
-
-        //生成后是否打开资源管理器
-        globalConfig.setOpen(false);
         //主键策略, 采用雪花片算法生成全局唯一ID
         globalConfig.setIdType(IdType.ID_WORKER);
+        //日期类型使用Date
+        globalConfig.setDateType(DateType.ONLY_DATE);
 
+        //------------ 命名格式 ------------
         //dto命名格式
         if (isDto) {
             //是否开启Swagger注解
@@ -192,6 +191,13 @@ public class MyBatisPlusGenerator {
         globalConfig.setServiceName("%sService");
         //mapper命名格式
         globalConfig.setMapperName("%sMapper");
+
+        //代码输出路径
+        globalConfig.setOutputDir(projectPath + projectName + "/src/main/java");
+        //作者
+        globalConfig.setAuthor(author);
+        //生成后是否打开资源管理器
+        globalConfig.setOpen(false);
 
         autoGenerator.setGlobalConfig(globalConfig);
 
