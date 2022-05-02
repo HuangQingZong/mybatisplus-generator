@@ -1,9 +1,7 @@
 package com.shanjupay.generator;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
@@ -13,7 +11,6 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * MyBatisPlus代码生成器
@@ -23,70 +20,59 @@ public class MyBatisPlusGenerator {
     //================ main方法 ================
     public static void main(String[] args) {
 
+        //创建代码生成器
+        AutoGenerator autoGenerator = new AutoGenerator();
+
         //------------ 配置代码生成器 ------------
         //全局配置
-        setGlobalConfig();
+        MyBatisPlusGenerator.assembleGlobalConfig(autoGenerator);
         //数据源配置
-        setDataSource();
+        MyBatisPlusGenerator.assembleDataSourceConfig(autoGenerator);
         //生成包配置
-        setPackageInfo();
+        MyBatisPlusGenerator.assemblePackageConfig(autoGenerator);
         //自定义配置
-        setInjectionConfig();
+        MyBatisPlusGenerator.assembleInjectionConfig(autoGenerator);
         //模板配置
-        setTemplate();
+        MyBatisPlusGenerator.assembleTemplateConfig(autoGenerator);
         //策略配置
-        setStrategy();
-        //模板引擎配置
-        setTemplateEngine();
+        MyBatisPlusGenerator.assembleStrategyConfig(autoGenerator);
 
         //------------ 开始生成代码 ------------
         autoGenerator.execute();
     }
 
-    //创建代码生成器
-    public static AutoGenerator autoGenerator = new AutoGenerator();
 
-    //================ 路径信息 ================
+    //================ 代码路径 ================
     //项目所在路径
-    public static String projectPath = System.getProperty("user.dir");
+    private static String projectPath = System.getProperty("user.dir");
     //生成代码存放路径
-    public static String projectName = "/code";
+    private static String projectName = "/code";
     //父包名
-    public static String parentPath = "com.shanjupay";
+    private static String parentPath = "com.shanjupay";
     //模块包名
-    public static String moduleName = "merchant";
+    private static String moduleName = "merchant";
+
 
     //================ 数据源 ================
     //数据库驱动
-    public static String driver = "com.mysql.cj.jdbc.Driver";
+    private static String driver = "com.mysql.cj.jdbc.Driver";
     //用户名
-    public static String username = "root";
+    private static String username = "root";
     //密码
-    public static String password = "root";
-    //数据库URL
-    public static String url =
-            "jdbc:mysql://localhost:3306/temp_generator?serverTimezone=Asia/Shanghai";
-//    public static String url =
-//            "jdbc:mysql://127.0.0.1:3306/shanjupay_transaction?serverTimezone=Asia/Shanghai";
+    private static String password = "root";
+    //数据库url
+    private static String url = "jdbc:mysql://localhost:3306/temp_generator?serverTimezone=Asia/Shanghai";
 
 
     //================ 其他配置 ================
     //作者
-    public static String author = "hqz";
+    private static String author = "hqz";
     //是否生成Dto，如果设置为false会生成entity
-    public static boolean isDto = true;
-
-
-    //================ 配置模板引擎 ================
-    private static void setTemplateEngine() {
-        //设置模板引擎
-        autoGenerator.setTemplateEngine(new FreemarkerTemplateEngine());
-    }
+    public static boolean isDto = false;
 
 
     //================ 策略配置 ================
-    private static void setStrategy() {
-
+    private static void assembleStrategyConfig(AutoGenerator autoGenerator) {
         StrategyConfig strategyConfig = new StrategyConfig();
 
         //表名映射到实体策略，带下划线的转成驼峰
@@ -113,8 +99,11 @@ public class MyBatisPlusGenerator {
 
 
     //================ 配置模板 ================
-    private static void setTemplate() {
+    private static void assembleTemplateConfig(AutoGenerator autoGenerator) {
+        //设置模板引擎
+        autoGenerator.setTemplateEngine(new FreemarkerTemplateEngine());
 
+        //配置模板
         TemplateConfig templateConfig = new TemplateConfig();
 
         // 配置自定义输出模板
@@ -129,7 +118,7 @@ public class MyBatisPlusGenerator {
 
 
     //================ 自定义配置 ================
-    private static void setInjectionConfig() {
+    private static void assembleInjectionConfig(AutoGenerator autoGenerator) {
         InjectionConfig injectionConfig = new InjectionConfig() {
             @Override
             public void initMap() {
@@ -137,16 +126,16 @@ public class MyBatisPlusGenerator {
             }
         };
 
-        // 如果模板引擎是 freemarker
+        //如果模板引擎是 freemarker
         String templatePath = "/templates/mapper.xml.ftl";
 
-        // 自定义输出配置, 自定义配置会被优先输出
+        //自定义输出配置, 自定义配置会被优先输出
         List<FileOutConfig> focList = new ArrayList<>();
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名
-                return projectPath + projectName+"/src/main/resources/mapper/" + moduleName
+                return projectPath + projectName + "/src/main/resources/mapper/" + moduleName
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -157,7 +146,7 @@ public class MyBatisPlusGenerator {
 
 
     //================ 生成包配置 ================
-    private static void setPackageInfo() {
+    private static void assemblePackageConfig(AutoGenerator autoGenerator) {
         PackageConfig packageConfig = new PackageConfig();
         packageConfig.setParent(parentPath);
         packageConfig.setModuleName(moduleName);
@@ -169,7 +158,7 @@ public class MyBatisPlusGenerator {
 
 
     //================ 数据源配置 ================
-    private static void setDataSource() {
+    private static void assembleDataSourceConfig(AutoGenerator autoGenerator) {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setDriverName(driver);
         dataSourceConfig.setUsername(username);
@@ -180,44 +169,33 @@ public class MyBatisPlusGenerator {
 
 
     //================ 全局配置 ================
-    private static void setGlobalConfig(){
+    private static void assembleGlobalConfig(AutoGenerator autoGenerator){
         GlobalConfig globalConfig = new GlobalConfig();
+
         globalConfig.setOutputDir(projectPath + projectName + "/src/main/java");
         globalConfig.setAuthor(author);
+
         //生成后是否打开资源管理器
         globalConfig.setOpen(false);
         //主键策略, 采用雪花片算法生成全局唯一ID
         globalConfig.setIdType(IdType.ID_WORKER);
 
-        //------------ 设置命名格式 ------------
+        //dto命名格式
         if (isDto) {
             //是否开启Swagger注解
             globalConfig.setSwagger2(true);
             globalConfig.setEntityName("%sDto");
+        }else{
+            globalConfig.setEntityName("%s");
         }
         //service命名格式
         globalConfig.setServiceName("%sService");
-        globalConfig.setEntityName("%s");
+        //mapper命名格式
         globalConfig.setMapperName("%sMapper");
 
         autoGenerator.setGlobalConfig(globalConfig);
 
     }
 
-
-    //================ 读取控制台内容 ================
-    private static String scanner(String tip) {
-        Scanner scanner = new Scanner(System.in);
-        StringBuilder help = new StringBuilder();
-        help.append("请输入" + tip + "：");
-        System.out.println(help.toString());
-        if (scanner.hasNext()) {
-            String ipt = scanner.next();
-            if (StringUtils.isNotEmpty(ipt)) {
-                return ipt;
-            }
-        }
-        throw new MybatisPlusException("请输入正确的" + tip + "！");
-    }
 
 }
